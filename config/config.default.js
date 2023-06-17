@@ -12,7 +12,13 @@ module.exports = (appInfo) => {
   config.keys = appInfo.name + "_1686783660239_1199";
 
   // add your middleware config here
-  config.middleware = [];
+  config.middleware = ["errorHandler"];
+
+  // add your user config here
+  const userConfig = {
+    // myAppName: 'egg',
+  };
+
   config.mongoose = {
     client: {
       url: "mongodb://127.0.0.1/youtube-demo",
@@ -22,9 +28,10 @@ module.exports = (appInfo) => {
     },
   };
 
-  // add your user config here
-  const userConfig = {
-    // myAppName: 'egg',
+  config.security = {
+    csrf: {
+      enable: false,
+    },
   };
 
   return {
