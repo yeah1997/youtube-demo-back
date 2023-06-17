@@ -5,6 +5,7 @@
  */
 module.exports = (app) => {
   const { router, controller } = app;
+  const auth = app.middleware.auth();
   // base router
   router.prefix("/api/v1");
 
@@ -13,4 +14,7 @@ module.exports = (app) => {
 
   // login user
   router.post("/users/login", controller.user.login);
+
+  // get current user
+  router.get("/user", auth, controller.user.getCurrentUser);
 };

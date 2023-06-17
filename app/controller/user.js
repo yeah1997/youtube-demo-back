@@ -67,6 +67,22 @@ class UserController extends Controller {
       },
     };
   }
+
+  async getCurrentUser() {
+    // check token
+    // get user info
+    // res
+    const user = this.ctx.user;
+    this.ctx.body = {
+      user: {
+        email: user.email,
+        token: this.ctx.headers["authorization"],
+        username: user.username,
+        channelDescription: user.channelDescription,
+        avatar: user.avatar,
+      },
+    };
+  }
 }
 
 module.exports = UserController;
