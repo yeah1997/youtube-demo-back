@@ -1,4 +1,5 @@
 const Service = require("egg").Service;
+const jwt = require("jsonwebtoken");
 
 class UserService extends Service {
   get User() {
@@ -14,13 +15,20 @@ class UserService extends Service {
   findByEmail(email) {
     return this.User.findOne({
       email,
-    });
+    }).select("+password");
   }
   async createUser(data) {
     data.password = this.ctx.helper.md5(data.password);
     const user = new this.User(data);
     await user.save();
     return user;
+  }
+
+  // token
+  createToken(userId) {
+    return jwt.sign(userId, this.app.config.jwt.secret, {
+      expiresIn: this.app.config.jwt.expiresIn,
+    });
   }
 }
 
