@@ -17,6 +17,12 @@ module.exports = (app) => {
   router.get("/user", auth, controller.user.getCurrentUser);
   // change current user info
   router.patch("/user", auth, controller.user.update);
+  // get user(channel) info
+  router.get(
+    "/users/:userId",
+    app.middleware.auth({ required: false }),
+    controller.user.getUser
+  );
 
   /** user & channel */
   // subscribe channel

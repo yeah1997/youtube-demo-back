@@ -177,12 +177,41 @@ class UserController extends Controller {
           "channelDescription",
           "cover",
           "email",
-          "_id",
-          "isSubscribed",
           "subscribersCount",
           "username",
         ]),
         isSubscribed: true,
+      },
+    };
+  }
+
+  async getUser() {
+    // get subscribe status
+    let isSubscribed = false;
+    if (this.ctx.user._id) {
+      // get subscribe status of user
+      const record = await this.app.model.Subscription.findOne({
+        user: this.ctx.user._id,
+        channel: this.ctx.params.userId,
+      });
+
+      if (record) isSubscribed = isSubscribed;
+    }
+    // get user(channel info)
+    const user = await this.app.model.User.findById(this.ctx.params.userId);
+
+    // res
+    this.ctx.body = {
+      user: {
+        ...this.ctx.helper._.pick(user, [
+          "avatar",
+          "channelDescription",
+          "cover",
+          "email",
+          "subscribersCount",
+          "username",
+        ]),
+        isSubscribed,
       },
     };
   }
