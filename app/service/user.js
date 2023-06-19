@@ -60,6 +60,23 @@ class UserService extends Service {
     }
     return user;
   }
+
+  async unsubscribe(userId, channelId) {
+    const { Subscription, User } = this.app.model;
+    // 1. check subscribe before
+    const record = await Subscription.findOne({
+      user: userId,
+      channel: channelId,
+    });
+    const user = await User.findById(channelId);
+    // 2. not subscribe before
+    if (record) {
+      await record.remove();
+      user.subscribersCount--;
+      await user.save();
+    }
+    return user;
+  }
 }
 
 module.exports = UserService;

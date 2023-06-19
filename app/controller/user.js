@@ -145,7 +145,43 @@ class UserController extends Controller {
     // res
     this.ctx.body = {
       user: {
-        ...user.toJSON(),
+        ...this.ctx.helper._.pick(user, [
+          "avatar",
+          "channelDescription",
+          "cover",
+          "email",
+          "_id",
+          "isSubscribed",
+          "subscribersCount",
+          "username",
+        ]),
+        isSubscribed: true,
+      },
+    };
+  }
+
+  async unsubscribe() {
+    const userId = this.ctx.user._id;
+    const channelId = this.ctx.params.userId;
+
+    // 1. can not scribe yourself
+    if (userId.equals(channelId))
+      this.ctx.throw(422, " can not scribe yourself");
+    // 2. cancel scribe
+    const user = await this.service.user.unsubscribe(userId, channelId);
+    // res
+    this.ctx.body = {
+      user: {
+        ...this.ctx.helper._.pick(user, [
+          "avatar",
+          "channelDescription",
+          "cover",
+          "email",
+          "_id",
+          "isSubscribed",
+          "subscribersCount",
+          "username",
+        ]),
         isSubscribed: true,
       },
     };
