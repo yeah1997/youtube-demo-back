@@ -83,6 +83,55 @@ class UserController extends Controller {
       },
     };
   }
+
+  async update() {
+    // validate data
+    const body = this.ctx.request.body;
+    this.ctx.validate({
+      username: { type: "string", required: false },
+      email: { type: "string", required: false },
+      password: { type: "string", required: false },
+      avatar: { type: "string", required: false },
+      channelDescription: { type: "string", required: false },
+    });
+    // check email
+    const userService = this.service.user;
+    if (body.email) {
+      if (
+        body.email === this.ctx.user.email ||
+        (await userService.findByEmail(body.email))
+      ) {
+        this.ctx.throw(422, "email is already defined or same before");
+      }
+    }
+
+    // check username
+    if (body.username) {
+      if (
+        body.username === this.ctx.user.username ||
+        (await userService.findByUsername(body.username))
+      ) {
+        this.ctx.throw(422, "username is already defined or same before");
+      }
+    }
+
+    if (body.password) {
+      body.password = this.ctx.helper.md5(body.password);
+    }
+
+    // update user info
+    const user = await userService.updateUser(body);
+
+    // res
+    this.ctx.body = {
+      user: {
+        email: user.email,
+        username: user.username,
+        channelDescription: user.channelDescription,
+        avatar: user.avatar,
+      },
+    };
+  }
 }
 
 module.exports = UserController;

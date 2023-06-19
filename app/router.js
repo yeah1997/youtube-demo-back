@@ -17,4 +17,7 @@ module.exports = (app) => {
 
   // get current user
   router.get("/user", auth, controller.user.getCurrentUser);
+
+  // change current user info
+  router.patch("/user", auth, controller.user.update);
 };
