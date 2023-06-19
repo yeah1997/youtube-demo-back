@@ -132,6 +132,24 @@ class UserController extends Controller {
       },
     };
   }
+
+  async subscribe() {
+    const userId = this.ctx.user._id;
+    const channelId = this.ctx.params.userId;
+
+    // 1. can not scribe yourself
+    if (userId.equals(channelId))
+      this.ctx.throw(422, " can not scribe yourself");
+    // 2. add scribe
+    const user = await this.service.user.subscribe(userId, channelId);
+    // res
+    this.ctx.body = {
+      user: {
+        ...user.toJSON(),
+        isSubscribed: true,
+      },
+    };
+  }
 }
 
 module.exports = UserController;

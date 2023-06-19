@@ -6,6 +6,7 @@
 module.exports = (app) => {
   const { router, controller } = app;
   const auth = app.middleware.auth();
+  /** user */
   // base router
   router.prefix("/api/v1");
 
@@ -20,4 +21,7 @@ module.exports = (app) => {
 
   // change current user info
   router.patch("/user", auth, controller.user.update);
+
+  /** user & channel */
+  router.post("/users/:userId/subscribe", auth, controller.user.subscribe);
 };
