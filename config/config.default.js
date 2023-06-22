@@ -39,6 +39,12 @@ module.exports = (appInfo) => {
     expiresIn: "1d",
   };
 
+  config.cors = {
+    origin: "*",
+    // {string|Function} origin: '*',
+    // {string|Array} allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
+  };
+
   return {
     ...config,
     ...userConfig,

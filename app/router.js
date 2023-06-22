@@ -29,4 +29,14 @@ module.exports = (app) => {
   router.post("/users/:userId/subscribe", auth, controller.user.subscribe);
   // cancel subscribe
   router.delete("/users/:userId/subscribe", auth, controller.user.unsubscribe);
+  // get subscriptions
+  router.get("/users/:userId/subscriptions", controller.user.getSubscriptions);
+
+  // ALI VOD
+  router.get("/vod/CreateUploadVideo", auth, controller.vod.createUploadVideo);
+  router.get(
+    "/vod/RefreshUploadVideo",
+    auth,
+    controller.vod.refreshUploadVideo
+  );
 };
