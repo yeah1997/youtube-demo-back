@@ -22,7 +22,10 @@ let vodClient = null;
 module.exports = {
   get vodClient() {
     if (!vodClient) {
-      vodClient = initVodClient("XXXX", "xxxx");
+      vodClient = initVodClient(
+        this.config.vod.accessKeyId,
+        this.config.vod.accessKeySecret
+      );
     }
     return vodClient;
   },

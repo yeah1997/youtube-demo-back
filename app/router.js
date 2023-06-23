@@ -33,10 +33,22 @@ module.exports = (app) => {
   router.get("/users/:userId/subscriptions", controller.user.getSubscriptions);
 
   // ALI VOD
+  // Get upload Address and credit
   router.get("/vod/CreateUploadVideo", auth, controller.vod.createUploadVideo);
+  // Create Video
+  router.post("/videos", auth, controller.video.createVideo);
+  //　Get Video Info
   router.get(
-    "/vod/RefreshUploadVideo",
-    auth,
-    controller.vod.refreshUploadVideo
+    "/video/:videoId",
+    app.middleware.auth({ required: false }),
+    controller.video.getVideo
   );
+  // Get video list
+  router.get("/videos", controller.video.getVideos);
+  // Get videos of user
+  router.get("/user/:userId/videos", controller.video.getUserVideos);
+  // Get feed videos
+  router.get("/user/videos/feed", auth, controller.video.getUserFeedVideos);
+
+  router.patch("/videos/:videoId", auth, controller.video.updateVideo);
 };
