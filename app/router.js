@@ -51,4 +51,28 @@ module.exports = (app) => {
   router.get("/user/videos/feed", auth, controller.video.getUserFeedVideos);
 
   router.patch("/videos/:videoId", auth, controller.video.updateVideo);
+
+  router.delete("/videos/:videoId", auth, controller.video.deleteVideo);
+
+  router.post(
+    "/videos/:videoId/comments",
+    auth,
+    controller.video.createComment
+  );
+
+  router.get(
+    "/videos/:videoId/comments",
+    auth,
+    controller.video.getVideoComments
+  );
+
+  router.delete(
+    "/videos/:videoId/comments/:commentId",
+    auth,
+    controller.video.deleteVideoComment
+  );
+
+  router.post("/videos/:videoId/like", auth, controller.video.likeVideo);
+
+  router.post("/videos/:videoId/dislike", auth, controller.video.dislikeVideo);
 };
