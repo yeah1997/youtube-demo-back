@@ -416,6 +416,39 @@ class VideoController extends Controller {
       },
     };
   }
+
+  async getUserLikedVideos() {
+    const { VideoLike, Video } = this.app.model;
+    let { pageNum = 1, pageSize = 10 } = this.ctx.query;
+    pageNum = Number.parseInt(pageNum);
+    pageSize = Number.parseInt(pageSize);
+    const filterDoc = {
+      user: this.ctx.user._id,
+      like: 1,
+    };
+    const likes = await VideoLike.find(filterDoc)
+      .sort({
+        createdAt: -1,
+      })
+      .skip((pageNum - 1) * pageSize)
+      .limit(pageSize);
+
+    const getVideos = Video.find({
+      _id: {
+        $in: likes.map((item) => item.video),
+      },
+    }).populate("user");
+
+    const getVideosCount = VideoLike.countDocuments(filterDoc);
+    const [videos, videosCount] = await Promise.all([
+      getVideos,
+      getVideosCount,
+    ]);
+    this.ctx.body = {
+      videos,
+      videosCount,
+    };
+  }
 }
 
 module.exports = VideoController;

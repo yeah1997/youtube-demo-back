@@ -75,4 +75,6 @@ module.exports = (app) => {
   router.post("/videos/:videoId/like", auth, controller.video.likeVideo);
 
   router.post("/videos/:videoId/dislike", auth, controller.video.dislikeVideo);
+
+  router.get("/user/videos/liked", auth, controller.video.getUserLikedVideos);
 };
